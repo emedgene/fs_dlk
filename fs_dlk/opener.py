@@ -23,9 +23,9 @@ class DLKFSOpener(Opener):
         dir_path = "/".join(resource[2:])
         dlkfs = DLKFS(
             dir_path=dir_path or '/',
-            az_username=parse_result.username or None,
-            az_password=parse_result.password or None,
-            az_tenant_id=tenant_id or None,
+            client_id=parse_result.username or None,
+            client_secret=parse_result.password or None,
+            tenant_id=tenant_id or None,
             store=store or None,
         )
 
