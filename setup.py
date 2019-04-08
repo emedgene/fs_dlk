@@ -8,7 +8,6 @@ with open("fs_s3fs/_version.py") as f:
 CLASSIFIERS = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 2.7",
@@ -31,7 +30,7 @@ setup(
     classifiers=CLASSIFIERS,
     description="Azure Datalake filesystem for PyFilesystem2",
     install_requires=REQUIREMENTS,
-    license="GNU",
+    license="MIT",
     long_description=DESCRIPTION,
     packages=find_packages(),
     keywords=["pyfilesystem", "Azure", "Datalake", "dlk"],
