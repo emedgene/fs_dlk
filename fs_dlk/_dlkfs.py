@@ -109,7 +109,10 @@ class DLKFS(FS):
         return key
 
     def _info_from_object(self, obj, namespaces):
-        """Make an info dict from a Datalake info() return."""
+        """ Make an info dict from a Datalake info() return.
+
+            List of functional namespaces: https://github.com/PyFilesystem/pyfilesystem2/blob/master/fs/info.py
+        """
         key = obj['name']
         path = self._key_to_path(key)
         name = basename(path.rstrip("/"))
