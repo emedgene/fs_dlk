@@ -1,0 +1,5 @@
+data-lake:
+  AZ_USERNAME: 'username'
+  AZ_PASSWORD: 'password'
+  AZ_TENANT_ID: 'tenant_id'
+  STORE: 'store_name'

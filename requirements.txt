@@ -1,0 +1,2 @@
+fs==2.4.*
+azure-datalake-store==0.0.*
