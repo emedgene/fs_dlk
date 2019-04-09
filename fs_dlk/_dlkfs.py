@@ -163,9 +163,7 @@ class DLKFS(FS):
             entries = self.dlk.ls(_key, detail=True)
 
         def format_dir(path):
-            nameonly = path[prefix_len:]
-            if nameonly.startswith('/'):
-                nameonly = nameonly[1:]
+            nameonly = path[prefix_len:].lstrip("/")
             return forcedir(nameonly)
 
         dirs = [format_dir(e['name']) for e in entries if e['type'] == 'DIRECTORY']
@@ -177,7 +175,7 @@ class DLKFS(FS):
         _path = self.validatepath(path)
         _key = self._path_to_dir_key(_path)
 
-        if not self.isdir(dirname(_path)):
+        if not self.isdir(dirname(_path.rstrip("/"))):
             raise errors.ResourceNotFound(path)
 
         try:
@@ -186,18 +184,38 @@ class DLKFS(FS):
             pass
         else:
             if recreate:
-                return self.opendir(_key)
-            else:
-                raise errors.DirectoryExists(path)
+                return self.opendir(_path)
+            raise errors.DirectoryExists(path)
         with dlkerrors(path):
             self.dlk.mkdir(_key)
-        return SubFS(self, _key)
+        return SubFS(self, _path)
 
     def remove(self, path):
-        raise NotImplementedError()
+        self.check()
+        _path = self.validatepath(path)
+        _key = self._path_to_key(_path)
+
+        info = self.getinfo(path)
+        if info.is_dir:
+            raise errors.FileExpected(path)
+
+        with dlkerrors(path):
+            self.dlk.rm(_key)
 
     def removedir(self, path):
-        raise NotImplementedError()
+        self.check()
+        _path = self.validatepath(path)
+        if _path == "/":
+            raise errors.RemoveRootError()
+        info = self.getinfo(_path)
+        if not info.is_dir:
+            raise errors.DirectoryExpected(path)
+        if not self.isempty(_path):
+            raise errors.DirectoryNotEmpty(path)
+
+        _key = self._path_to_dir_key(_path)
+        with dlkerrors(path):
+            self.dlk.rmdir(_key)
 
     def setinfo(self, path, info):
         self.getinfo(path)
