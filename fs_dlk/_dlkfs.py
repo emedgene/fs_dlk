@@ -195,7 +195,7 @@ class DLKFS(FS):
         _path = self.validatepath(path)
         _key = self._path_to_key(_path)
 
-        info = self.getinfo(path)
+        info = self.getinfo(_path)
         if info.is_dir:
             raise errors.FileExpected(path)
 
