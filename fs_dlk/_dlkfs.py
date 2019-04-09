@@ -66,7 +66,6 @@ class DLKFS(FS):
     def getinfo(self, path, namespaces=None):
         self.check()
         namespaces = namespaces or ()
-        invalidate_cache = True  # always invalidate cache
         _path = self.validatepath(path)
         _key = self._path_to_key(_path)
 
@@ -81,7 +80,7 @@ class DLKFS(FS):
         info = None
         try:
             with dlkerrors(path):
-                info = self.dlk.info(_key, invalidate_cache=invalidate_cache)
+                info = self.dlk.info(_key)
         except errors.ResourceNotFound:
             raise errors.ResourceNotFound(path)
 
@@ -155,7 +154,22 @@ class DLKFS(FS):
         return info
 
     def listdir(self, path):
-        raise NotImplementedError()
+        _path = self.validatepath(path)
+        _key = self._path_to_key(_path)
+        prefix_len = len(_key)
+
+        with dlkerrors(path):
+            entries = self.dlk.ls(_key, detail=True)
+
+        def format_dir(path):
+            nameonly = path[prefix_len:]
+            if nameonly.startswith('/'):
+                nameonly = nameonly[1:]
+            return forcedir(nameonly)
+
+        dirs = [format_dir(e['name']) for e in entries if e['type'] == 'DIRECTORY']
+        files = [basename(e['name']) for e in entries if e['type'] != 'DIRECTORY']
+        return sorted(dirs) + sorted(files)
 
     def makedir(self, path, permissions=None, recreate=False):
         raise NotImplementedError()

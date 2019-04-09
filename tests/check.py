@@ -22,6 +22,10 @@ def main():
 def test_listdir():
     test_dlk = open_fs("dlk://{AZ_USERNAME}:{AZ_PASSWORD}@{AZ_TENANT_ID}/{STORE}/".format(**TEST_CFG))
     print(test_dlk.listdir("."))
+    print(test_dlk.listdir("emg-cases/test_b2702/EMG184980315/Case2Pvcf/v1.0.6_a7d61de/"))
+    print(test_dlk.listdir("emg-cases/test_b2702/EMG184980315/Case2Pvcf/v1.0.6_a7d61de"))
+    print(test_dlk.listdir("emg-cases/test_b2702/EMG184980315/Case2Pvcf/v1.0.6_a7d61de/EMG184980315.vcf.gz"))
+    print(test_dlk.listdir("aaa"))
 
 
 def test_getinfo():
