@@ -5,7 +5,9 @@ from itertools import chain
 
 from fs import errors
 from fs import ResourceType
+from fs import tools
 from fs.base import FS
+from fs.mode import Mode
 from fs.subfs import SubFS
 from fs.info import Info
 from fs.path import basename, normpath, relpath, forcedir, dirname
@@ -221,4 +223,42 @@ class DLKFS(FS):
         self.getinfo(path)
 
     def openbin(self, path, mode="r", buffering=-1, **options):
-        raise NotImplementedError()
+        _mode = Mode(mode)
+        _mode.validate_bin()
+        self.check()
+        _path = self.validatepath(path)
+        _key = self._path_to_key(_path)
+
+        info = None
+        try:
+            info = self.getinfo(path)
+        except errors.ResourceNotFound:
+            pass
+        else:
+            if info.is_dir:
+                raise errors.FileExpected(path)
+
+        if _mode.create:
+            try:
+                dir_path = dirname(_path)
+                if dir_path != "/":
+                    self.getinfo(dir_path)
+            except errors.ResourceNotFound:
+                raise errors.ResourceNotFound(path)
+
+            if info and _mode.exclusive:
+                raise errors.FileExists(path)
+
+        # AzureDLFile does not support exclusive mode, but we mimic it
+        dlkfile = self.dlk.open(_key, str(_mode).replace("x", ""))
+        return dlkfile
+
+    def download(self, path, file, chunk_size=None, **options):
+        with self._lock:
+            with self.openbin(path, mode="rb", **options) as read_file:
+                tools.copy_file_data(read_file, file, chunk_size=read_file.blocksize)
+
+    def upload(self, path, file, chunk_size=None, **options):
+        with self._lock:
+            with self.openbin(path, mode="wb", **options) as dst_file:
+                tools.copy_file_data(file, dst_file, chunk_size=dst_file.blocksize)

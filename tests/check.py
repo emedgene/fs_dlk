@@ -14,6 +14,7 @@ def main():
         test_makedir,
         test_getinfo,
         test_removedir,
+        test_openbin
     ]
 
     for f in to_test:
@@ -50,6 +51,19 @@ def test_removedir():
     test_dlk.makedir("subdir", recreate=True)
     pprint(test_dlk.listdir("/"))
     test_dlk.removedir("subdir")
+    pprint(test_dlk.listdir("/"))
+
+
+def test_openbin():
+    test_dlk = open_fs("dlk://{AZ_USERNAME}:{AZ_PASSWORD}@{AZ_TENANT_ID}/{STORE}/{TEST_ROOT}".format(**TEST_CFG))
+    with test_dlk.open("hello_world", "wb") as f:
+        f.write("Hello world!".encode())
+    pprint(test_dlk.listdir("/"))
+    with open("test.txt", "wb") as f:
+        test_dlk.download("hello_world", f)
+    with open("test.txt", "r") as f:
+        pprint(f.read())
+    test_dlk.remove("hello_world")
     pprint(test_dlk.listdir("/"))
 
 
