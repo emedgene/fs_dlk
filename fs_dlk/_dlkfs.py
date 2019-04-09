@@ -6,8 +6,9 @@ from itertools import chain
 from fs import errors
 from fs import ResourceType
 from fs.base import FS
+from fs.subfs import SubFS
 from fs.info import Info
-from fs.path import basename, normpath, relpath, forcedir
+from fs.path import basename, normpath, relpath, forcedir, dirname
 
 import azure.datalake.store as az_store
 import azure.datalake.store.exceptions as client_error
@@ -172,10 +173,25 @@ class DLKFS(FS):
         return sorted(dirs) + sorted(files)
 
     def makedir(self, path, permissions=None, recreate=False):
-        raise NotImplementedError()
+        self.check()
+        _path = self.validatepath(path)
+        _key = self._path_to_dir_key(_path)
 
-    def openbin(self, path, mode="r", buffering=-1, **options):
-        raise NotImplementedError()
+        if not self.isdir(dirname(_path)):
+            raise errors.ResourceNotFound(path)
+
+        try:
+            self.getinfo(path)
+        except errors.ResourceNotFound:
+            pass
+        else:
+            if recreate:
+                return self.opendir(_key)
+            else:
+                raise errors.DirectoryExists(path)
+        with dlkerrors(path):
+            self.dlk.mkdir(_key)
+        return SubFS(self, _key)
 
     def remove(self, path):
         raise NotImplementedError()
@@ -185,3 +201,6 @@ class DLKFS(FS):
 
     def setinfo(self, path, info):
         self.getinfo(path)
+
+    def openbin(self, path, mode="r", buffering=-1, **options):
+        raise NotImplementedError()
