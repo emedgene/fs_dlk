@@ -1,6 +1,9 @@
 __pycache__
 *.pyo
 *.pyc
-/tests/config/*.yaml
+/tests/config/*
 !/tests/config/test.yaml
+/tests/data/*
+!/tests/data/upload.txt
 *.egg-info
+.coverage

@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd tests/
-PYTHONPATH=".." python check.py
+cd tests
+PYTHONPATH=".." pytest --cov=fs_dlk .
