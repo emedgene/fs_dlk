@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd tests
-PYTHONPATH=".." pytest --cov=fs_dlk --capture=no .
+PYTHONPATH=".." pytest --cov=fs_dlk .
