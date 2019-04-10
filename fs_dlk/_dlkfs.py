@@ -46,20 +46,33 @@ class DLKFS(FS):
             client_id=None,
             client_secret=None,
             tenant_id=None,
+            username=None,
+            password=None,
             store=None
     ):
         self._prefix = relpath(normpath(dir_path)).rstrip("/")
         self._tlocal = threading.local()
-        self.client_id = client_id
-        self.client_secret = client_secret
+
         self.tenant_id = tenant_id
+        if self.tenant_id:
+            self.username = client_id
+            self.password = client_secret
+        else:
+            self.username = username
+            self.password = password
+
         self.store_name = store
         super(DLKFS, self).__init__()
 
     @property
     def dlk(self):
         if not hasattr(self._tlocal, "dlk"):
-            token = az_store.lib.auth(self.tenant_id, client_id=self.client_id, client_secret=self.client_secret)
+            if self.tenant_id:
+                token = az_store.lib.auth(tenant_id=self.tenant_id,
+                                          client_id=self.username,
+                                          client_secret=self.password)
+            else:
+                token = az_store.lib.auth(username=self.username, password=self.password)
             self._tlocal.dlk = az_store.core.AzureDLFileSystem(
                 token,
                 store_name=self.store_name
