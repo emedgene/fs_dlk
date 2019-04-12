@@ -1,3 +1,10 @@
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+
+__all__ = ["DLKFS"]
+
+import os
 import contextlib
 import threading
 
@@ -12,8 +19,37 @@ from fs.subfs import SubFS
 from fs.info import Info
 from fs.path import basename, normpath, relpath, forcedir, dirname
 
+import six
+
 import azure.datalake.store as az_store
 import azure.datalake.store.exceptions as client_error
+
+
+def _make_repr(class_name, *args, **kwargs):
+    """
+    Generate a repr string.
+
+    Positional arguments should be the positional arguments used to
+    construct the class. Keyword arguments should consist of tuples of
+    the attribute value and default. If the value is the default, then
+    it won't be rendered in the output.
+
+    Here's an example::
+
+        def __repr__(self):
+            return make_repr('MyClass', 'foo', name=(self.name, None))
+
+    The output of this would be something line ``MyClass('foo',
+    name='Will')``.
+
+    """
+    arguments = [repr(arg) for arg in args]
+    arguments.extend(
+        "{}={!r}".format(name, value)
+        for name, (value, default) in sorted(kwargs.items())
+        if value != default
+    )
+    return "{}({})".format(class_name, ", ".join(arguments))
 
 
 @contextlib.contextmanager
@@ -39,6 +75,7 @@ def dlkerrors(path):
         raise errors.RemoteConnectionError(path, exc=error, msg="DatalakeRESTException")
 
 
+@six.python_2_unicode_compatible
 class DLKFS(FS):
     def __init__(
             self,
@@ -78,6 +115,23 @@ class DLKFS(FS):
                 store_name=self.store_name
             )
         return self._tlocal.dlk
+
+    def __repr__(self):
+        userpass_auth = self.tenant_id is None
+
+        return _make_repr(
+            self.__class__.__name__,
+            self._prefix,
+            client_id=(self.username if not userpass_auth else None, None),
+            client_secret=(self.password if not userpass_auth else None, None),
+            tenant_id=(self.tenant_id, None),
+            username=(self.username if userpass_auth else None, None),
+            password=(self.password if userpass_auth else None, None),
+            store=(self.store_name, None),
+        )
+
+    def __str__(self):
+        return text_type("<dlk '{}'>".format(os.path.join(self.store_name, self._prefix)))
 
     def getinfo(self, path, namespaces=None):
         self.check()
