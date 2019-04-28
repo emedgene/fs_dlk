@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-with open("fs_s3fs/_version.py") as f:
+with open("fs_dlk/_version.py") as f:
     exec(f.read())
 
 CLASSIFIERS = [
