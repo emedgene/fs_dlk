@@ -191,7 +191,7 @@ class DLKFS(FS):
         details_mapping = {
             "accessed": "accessTime",
             "modified": "modificationTime",
-            "size": "blockSize"
+            "size": "length"
         }
         if "details" in namespaces:
             _type = int(ResourceType.directory if is_dir else ResourceType.file)
