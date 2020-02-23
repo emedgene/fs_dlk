@@ -16,18 +16,23 @@ Opening FS Datalake
 -------------------
 
 Authentication with username and password:
+
 .. code-block:: python
 
     from fs_dlk import DLKFS
     dlkfs = DLKFS("/path/to/the/remote/dir", username="username", password="password")
 
+
 Authentication with tenant secret:
+
 .. code-block:: python
 
     from fs_dlk import DLKFS
     dlkfs = DLKFS("/path/to/the/remote/dir", tenant_id="tenant id", client_id="client id", client_secret="client_secret")
 
+
 Specifying custom store name:
+
 .. code-block:: python
 
     from fs_dlk import DLKFS
@@ -38,6 +43,7 @@ Authentication with connection strings:
 ---------------------------------------
 
 Username and password auth:
+
 .. code-block:: python
 
     import fs
