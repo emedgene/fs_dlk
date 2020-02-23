@@ -131,7 +131,7 @@ class DLKFS(FS):
         )
 
     def __str__(self):
-        return text_type("<dlk '{}'>".format(os.path.join(self.store_name, self._prefix)))
+        return six.text_type("<dlk '{}'>".format(os.path.join(self.store_name, self._prefix)))
 
     def getinfo(self, path, namespaces=None):
         self.check()
