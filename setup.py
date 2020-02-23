@@ -37,7 +37,7 @@ setup(
     keywords=["pyfilesystem", "Azure", "Datalake", "dlk"],
     platforms=["any"],
     url="https://github.com/emedgene/fs_dlk",
-    download_url="https://github.com/emedgene/fs_dlk/tarball/feature/doc",
+    download_url="https://github.com/emedgene/fs_dlk/tarball/0.1.3",
     version=__version__,
     entry_points={"fs.opener": ["dlk = fs_dlk.opener:DLKFSOpener"]},
 )
