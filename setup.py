@@ -22,11 +22,11 @@ CLASSIFIERS = [
 with open("README.md", "rt") as f:
     DESCRIPTION = f.read()
 
-REQUIREMENTS = ["azure-datalake-store~=0.0.44", "fs==2.*", "six==1.*"]
+REQUIREMENTS = ["azure-datalake-store~=0.0", "fs~=2.4", "six~=1.14"]
 
 setup(
     name="fs-dlk",
-    author="vindex10",
+    author="emedgene",
     classifiers=CLASSIFIERS,
     description="Azure Datalake filesystem for PyFilesystem2",
     install_requires=REQUIREMENTS,
