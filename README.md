@@ -47,14 +47,15 @@ Username and password auth:
 .. code-block:: python
 
     import fs
-    dlkfs = fs.openfs("dlk://username:password@/store_name/path/to/remote")
+    dlkfs = fs.open_fs("dlk://username:password@/store_name/path/to/remote")
 
 
 Tenant secret auth:
+
 .. code-block:: python
 
     import fs
-    dlkfs = fs.openfs("dlk://username:password@tenant-id/store_name/path/to/remote")
+    dlkfs = fs.open_fs("dlk://username:password@tenant-id/store_name/path/to/remote")
 
 
 Downloading files
