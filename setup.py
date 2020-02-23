@@ -19,7 +19,7 @@ CLASSIFIERS = [
     "Topic :: System :: Filesystems",
 ]
 
-with open("README.md", "rt") as f:
+with open("README.rst", "rt") as f:
     DESCRIPTION = f.read()
 
 REQUIREMENTS = ["azure-datalake-store~=0.0", "fs~=2.4", "six~=1.14"]
