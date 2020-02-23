@@ -1,7 +1,7 @@
 fs\_dlk
 =======
 
-`pyfilesystem2 <https://github.com/PyFilesystem/pyfilesystem2>`_ interface to `Azure Datalake <https://github.com/Azure/azure-data-lake-store-python>_
+`pyfilesystem2 <https://github.com/PyFilesystem/pyfilesystem2>`_ interface to `Azure Datalake <https://github.com/Azure/azure-data-lake-store-python>`_
 
 
 Installing
