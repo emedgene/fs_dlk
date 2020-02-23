@@ -27,6 +27,7 @@ REQUIREMENTS = ["azure-datalake-store~=0.0", "fs~=2.4", "six~=1.14"]
 setup(
     name="fs-dlk",
     author="emedgene",
+    author_email="pypi@emedgene.com",
     classifiers=CLASSIFIERS,
     description="Azure Datalake filesystem for PyFilesystem2",
     install_requires=REQUIREMENTS,
