@@ -19,14 +19,15 @@ CLASSIFIERS = [
     "Topic :: System :: Filesystems",
 ]
 
-with open("README.md", "rt") as f:
+with open("README.rst", "rt") as f:
     DESCRIPTION = f.read()
 
-REQUIREMENTS = ["azure-datalake-store~=0.0.44", "fs==2.*", "six==1.*"]
+REQUIREMENTS = ["azure-datalake-store~=0.0", "fs~=2.4", "six~=1.14"]
 
 setup(
     name="fs-dlk",
-    author="vindex10",
+    author="emedgene",
+    author_email="pypi@emedgene.com",
     classifiers=CLASSIFIERS,
     description="Azure Datalake filesystem for PyFilesystem2",
     install_requires=REQUIREMENTS,
@@ -35,7 +36,8 @@ setup(
     packages=find_packages(),
     keywords=["pyfilesystem", "Azure", "Datalake", "dlk"],
     platforms=["any"],
-    url="https://github.com/vindex10/fs_dlk",
+    url="https://github.com/emedgene/fs_dlk",
+    download_url="https://github.com/emedgene/fs_dlk/tarball/0.1.3",
     version=__version__,
     entry_points={"fs.opener": ["dlk = fs_dlk.opener:DLKFSOpener"]},
 )
